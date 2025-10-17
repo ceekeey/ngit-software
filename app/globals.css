@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* 💎 Light Theme — Cyber Mint */
+:root {
+    --primary: #00B894;
+    --accent: #0984E3;
+    --background: #F5F5F5;
+    --text: #0B0C10;
+}
+
+/* 🟦 Dark Theme — Neo Tech Blue */
+[data-theme="dark"] {
+    --primary: #0052CC;
+    --accent: #00E5FF;
+    --background: #0A192F;
+    --text: #EAEAEA;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
