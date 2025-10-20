@@ -8,6 +8,7 @@ import Services from "@/components/Services";
 import Team from "@/components/Team";
 import Training from "@/components/Training";
 import React from "react";
+import { Toaster } from "react-hot-toast";
 
 const hompage = () => {
   return (
@@ -21,6 +22,7 @@ const hompage = () => {
       <Portpolio />
       <Client />
       <Footer />
+      <Toaster />
     </main>
   );
 };
