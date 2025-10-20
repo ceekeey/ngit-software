@@ -15,24 +15,28 @@ import {
   ChevronRight,
   GraduationCap,
 } from "lucide-react";
+import { FaUserCheck } from 'react-icons/fa'
+import { PiStudent } from "react-icons/pi";
 
-export default function StudentLayout({ children }) {
+export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false); // for desktop mini mode
 
   const navLinks = [
-    { name: "Dashboard", href: "/student/dashboard", icon: <LayoutDashboard size={20} /> },
-    { name: "Program", href: "/student/programs", icon: <GraduationCap size={20} /> },
+    { name: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
+    { name: "Program", href: "/admin/programs", icon: <GraduationCap size={20} /> },
+    { name: "Staff", href: "/admin/staff", icon: <FaUserCheck size={20} /> },
+    { name: "Students", href: "/admin/student", icon: <PiStudent size={20} /> },
     {
-      name: "Payments", href: "/student/payments", icon: (
+      name: "Payments", href: "/admin/payments", icon: (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <rect x="1" y="4" width="22" height="16" rx="2" />
           <line x1="1" y1="10" x2="23" y2="10" />
         </svg>
       )
     },
-    { name: "Certificates", href: "/student/certificates", icon: <Award size={20} /> },
-    { name: "Settings", href: "/student/settings", icon: <Settings size={20} /> },
+    { name: "Certificates", href: "/admin/certificates", icon: <Award size={20} /> },
+    { name: "Settings", href: "/admin/settings", icon: <Settings size={20} /> },
   ];
 
   return (
@@ -48,7 +52,7 @@ export default function StudentLayout({ children }) {
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
-          <Link href="/student" className="font-semibold text-lg">
+          <Link href="/admin" className="font-semibold text-lg">
             🎓 Ngit Academy
           </Link>
         </div>

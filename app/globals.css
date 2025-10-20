@@ -1,15 +1,29 @@
 @import "tailwindcss";
 
 :root {
-    --primary: #0052CC;
-    --accent: #2E8BFD;
-    --background: #F5F7FA;
-    --text: #1C1C1E;
+  --primary: #0052cc;
+  --accent: #2e8bfd;
+  --background: #f5f7fa;
+  --text: #1c1c1e;
 }
 
-
 body {
-    background-color: var(--background);
-    color: var(--text);
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
 }
