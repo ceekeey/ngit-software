@@ -10,12 +10,12 @@ const Navigation = () => {
 
     const navLinks = [
         { name: "Home", path: "/" },
-        { name: "About", path: "/#about" },
+        { name: "About", path: "/about" },
         { name: "Team", path: "/#team" },
         { name: "Training", path: "/#training" },
         { name: "Portfolio", path: "/portfolio" },
         { name: "Solutions", path: "/solutions" },
-        { name: "Login", path: "/student/login" },
+        { name: "Login", path: "/student-login" },
     ];
 
     return (
@@ -41,9 +41,8 @@ const Navigation = () => {
                                 </Link>
                                 {/* underline only (no text color change). uses white so it's visible on the blue bar */}
                                 <span
-                                    className={`absolute left-0 bottom-0 h-[2px] w-full bg-white transform origin-left transition-transform duration-300 ${
-                                        isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                                    }`}
+                                    className={`absolute left-0 bottom-0 h-[2px] w-full bg-white transform origin-left transition-transform duration-300 ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                                        }`}
                                 ></span>
                             </li>
                         );
@@ -79,9 +78,8 @@ const Navigation = () => {
                                         {link.name}
                                     </Link>
                                     <span
-                                        className={`absolute left-0 bottom-0 h-[2px] w-full bg-white transform origin-left transition-transform duration-300 ${
-                                            isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                                        }`}
+                                        className={`absolute left-0 bottom-0 h-[2px] w-full bg-white transform origin-left transition-transform duration-300 ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                                            }`}
                                     ></span>
                                 </li>
                             );

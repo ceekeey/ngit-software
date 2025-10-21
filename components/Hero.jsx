@@ -102,13 +102,13 @@ const Hero = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
-            href="#signup"
+            href="student-register"
             className="bg-[#0052CC] text-white px-6 py-3 rounded-full hover:bg-[#2E8BFD] transition shadow-md"
           >
             Register for a course
           </a>
           <a
-            href="#about"
+            href="/about"
             className="border border-[#2E8BFD] text-[#2E8BFD] px-6 py-3 rounded-full hover:bg-[#2E8BFD] hover:text-white transition"
           >
             Learn More
