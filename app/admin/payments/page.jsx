@@ -1,163 +1,129 @@
+// CoursePaymentsPage.js (New Component for the Program Card List)
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-    FaCreditCard,
-    FaCheckCircle,
-    FaTimesCircle,
-    FaFilter,
-} from "react-icons/fa";
+import { FaCreditCard, FaFilter, FaBookOpen, FaUsers } from "react-icons/fa";
+import Link from 'next/link'; // Import Link for navigation
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-export default function PaymentPage() {
+// Dummy data for Programs and Chart
+const PROGRAM_LIST = [
+    { id: 'web-dev-basics', name: "Web Development Basics", enrollments: 350, pending: 45, color: '#0052CC' },
+    { id: 'advanced-react', name: "Advanced React", enrollments: 210, pending: 20, color: '#FF8042' },
+    { id: 'ui-ux-design', name: "UI/UX Design Fundamentals", enrollments: 180, pending: 12, color: '#00C49F' },
+    { id: 'nodejs-essentials', name: "Node.js Essentials", enrollments: 150, pending: 8, color: '#FFBB28' },
+];
+
+const chartData = [
+    { month: "Jul", Paid: 6900, Pending: 1500 },
+    { month: "Aug", Paid: 5900, Pending: 1200 },
+    { month: "Sep", Paid: 7900, Pending: 2000 },
+    { month: "Oct", Paid: 4900, Pending: 1800 },
+];
+
+function ProgramCard({ program }) {
+    return (
+        // Link to the new dynamic single program page
+        <Link href={`payments/${program.id}`}>
+            <div
+                className="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all duration-300 cursor-pointer border-t-4"
+                style={{ borderColor: program.color }}
+            >
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-xl font-bold text-gray-800">{program.name}</h2>
+                    <FaBookOpen className="text-gray-500" size={24} />
+                </div>
+
+                <p className="text-sm text-gray-500 mb-4">Total Students: <span className="font-semibold text-gray-700">{program.enrollments}</span></p>
+
+                <div className="flex justify-between text-center border-t pt-4">
+                    <div>
+                        <p className="text-2xl font-bold text-green-600">
+                            {program.enrollments - program.pending}
+                        </p>
+                        <p className="text-xs text-gray-500">Paid/Settled</p>
+                    </div>
+                    <div>
+                        <p className="text-2xl font-bold text-red-600">
+                            {program.pending}
+                        </p>
+                        <p className="text-xs text-gray-500">Pending</p>
+                    </div>
+                </div>
+            </div>
+        </Link>
+    );
+}
+
+
+export default function CoursePaymentsPage() {
     const [showModal, setShowModal] = useState(false);
-    const [filter, setFilter] = useState("All");
 
-    const payments = [
-        { course: "Web Development Basics", amount: 49, date: "Oct 10, 2025", status: "Paid" },
-        { course: "Advanced React", amount: 79, date: "Sep 22, 2025", status: "Pending" },
-        { course: "UI/UX Design Fundamentals", amount: 59, date: "Aug 12, 2025", status: "Paid" },
-        { course: "Node.js Essentials", amount: 69, date: "Jul 5, 2025", status: "Paid" },
-    ];
-
-    const filteredPayments =
-        filter === "All" ? payments : payments.filter((p) => p.status === filter);
-
-    const chartData = [
-        { month: "Jul", total: 69, status: "Paid" },
-        { month: "Aug", total: 59, status: "Paid" },
-        { month: "Sep", total: 79, status: "Pending" },
-        { month: "Oct", total: 49, status: "Paid" },
-    ];
-
-    const maxAmount = Math.max(...chartData.map((d) => d.total));
-    const [animateBars, setAnimateBars] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setAnimateBars(true), 200);
-        return () => clearTimeout(timer);
-    }, []);
+    // We will use filter here if we had more than one category of programs, 
+    // but for now, we show all.
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-10 p-6 md:p-8">
             {/* Header */}
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-[var(--text)]">Payment History</h1>
+                    <h1 className="text-3xl font-extrabold text-gray-800">Program Payment Overview</h1>
                     <p className="text-sm text-gray-500">
-                        Manage your payments and view your transactions
+                        Select a program to view individual student payment status.
                     </p>
                 </div>
 
                 <button
                     onClick={() => setShowModal(true)}
-                    className="bg-[var(--accent)] text-white px-5 py-2 rounded-lg hover:brightness-110 transition-all flex items-center gap-2"
+                    className="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all flex items-center gap-2 font-medium shadow-md"
                 >
                     <FaCreditCard />
-                    Make Payment
+                    Record New Payment
                 </button>
             </div>
 
-            {/* Filter */}
-            <div className="flex items-center gap-3">
-                <FaFilter className="text-gray-600" />
-                <select
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
-                >
-                    <option value="All">All Payments</option>
-                    <option value="Paid">Paid</option>
-                    <option value="Pending">Pending</option>
-                </select>
-            </div>
-
-            {/* Table */}
-            <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-[var(--background)] text-gray-700">
-                        <tr>
-                            <th className="p-4 font-medium">Course</th>
-                            <th className="p-4 font-medium">Amount</th>
-                            <th className="p-4 font-medium">Date</th>
-                            <th className="p-4 font-medium">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredPayments.map((p, i) => (
-                            <tr key={i} className="border-t hover:bg-gray-50 transition-all">
-                                <td className="p-4">{p.course}</td>
-                                <td className="p-4">${p.amount}</td>
-                                <td className="p-4">{p.date}</td>
-                                <td className="p-4">
-                                    {p.status === "Paid" ? (
-                                        <span className="flex items-center gap-1 text-green-600">
-                                            <FaCheckCircle />
-                                            Paid
-                                        </span>
-                                    ) : (
-                                        <span className="flex items-center gap-1 text-yellow-600">
-                                            <FaTimesCircle />
-                                            Pending
-                                        </span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Custom Bar Chart */}
-            <div className="bg-white rounded-2xl shadow-md p-6 min-h-[260px]">
-                <h2 className="text-lg font-semibold text-[var(--text)] mb-4">
-                    Payment Summary by Month
+            {/* --- RECHARTS CHART --- */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 min-h-[300px]">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                    Monthly Payment Summary (Total Value)
                 </h2>
-
-                <div className="flex items-end justify-between h-48 gap-4">
-                    {chartData.map((data, i) => (
-                        <div key={i} className="flex flex-col items-center flex-1">
-                            <div
-                                className={`w-full rounded-t-lg transition-all duration-700 ease-out origin-bottom ${data.status === "Paid"
-                                        ? "bg-green-500 hover:bg-green-600"
-                                        : "bg-yellow-500 hover:bg-yellow-600"
-                                    }`}
-                                style={{
-                                    height: animateBars
-                                        ? `${(data.total / maxAmount) * 100}%`
-                                        : "0%",
-                                }}
-                            ></div>
-                            <span className="text-sm mt-2 text-gray-600 font-medium">
-                                {data.month}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Legend */}
-                <div className="flex justify-center gap-6 mt-6 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-green-500 rounded-full"></span> Paid
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="w-3 h-3 bg-yellow-500 rounded-full"></span> Pending
-                    </div>
-                </div>
+                <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                        <XAxis dataKey="month" stroke="#6B7280" />
+                        <YAxis stroke="#6B7280" tickFormatter={(value) => `$${value.toLocaleString()}`} />
+                        <Tooltip
+                            formatter={(value, name) => [`$${value.toLocaleString()}`, name]}
+                            contentStyle={{ borderRadius: '8px', border: 'none' }}
+                        />
+                        <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                        <Bar dataKey="Paid" stackId="a" fill="#10B981" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="Pending" stackId="a" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                </ResponsiveContainer>
             </div>
 
-            {/* Modal */}
+            {/* Program Cards Grid */}
+            <h2 className="text-2xl font-bold text-gray-800 pt-4 border-t">Programs List</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {PROGRAM_LIST.map((program) => (
+                    <ProgramCard key={program.id} program={program} />
+                ))}
+            </div>
+
+            {/* Modal - same as your original "Make Payment" modal */}
             {showModal && (
-                <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center z-50 transition-all">
+                <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 transition-all">
                     <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl relative animate-fadeIn">
                         <button
                             onClick={() => setShowModal(false)}
-                            className="absolute top-3 right-3 text-gray-500 hover:text-red-500"
+                            className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"
                         >
                             ✕
                         </button>
 
-                        <h2 className="text-xl font-semibold text-[var(--text)] mb-4">
-                            Make a Payment
+                        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                            Record New Payment
                         </h2>
 
                         <form
@@ -176,7 +142,7 @@ export default function PaymentPage() {
                                     type="text"
                                     required
                                     placeholder="e.g. Web Development Basics"
-                                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 />
                             </div>
 
@@ -188,13 +154,13 @@ export default function PaymentPage() {
                                     type="number"
                                     required
                                     placeholder="e.g. 49"
-                                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+                                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 />
                             </div>
 
                             <button
                                 type="submit"
-                                className="w-full bg-[var(--primary)] text-white py-2 rounded-lg hover:bg-blue-700 transition-all"
+                                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-all font-medium"
                             >
                                 Confirm Payment
                             </button>

@@ -1,148 +1,89 @@
+// CertificatesPage.js (Updated)
 "use client";
 import { useRouter } from "next/navigation";
-import { Download, Award, FileCheck } from "lucide-react";
+import { Award, FileCheck, Users, GraduationCap } from "lucide-react";
+
+// Dummy program data (simulating a database/API call)
+const PROGRAMS_FOR_CERTIFICATION = [
+    {
+        id: "frontend-dev",
+        title: "Frontend Development",
+        description: "Master HTML, CSS, JavaScript fundamentals and React framework.",
+        studentsEligible: 45,
+        totalEnrolled: 120,
+    },
+    {
+        id: "backend-dev",
+        title: "Backend Development",
+        description: "Learn Node.js, Express, and efficient database management (MongoDB).",
+        studentsEligible: 32,
+        totalEnrolled: 90,
+    },
+    {
+        id: "data-science",
+        title: "Data Science & ML",
+        description: "Explore Python, data analysis with pandas, and machine learning basics.",
+        studentsEligible: 21,
+        totalEnrolled: 60,
+    },
+];
 
 export default function CertificatesPage() {
     const router = useRouter();
 
-    const programs = [
-        {
-            id: 1,
-            title: "Frontend Development",
-            description: "Master HTML, CSS, and JavaScript fundamentals.",
-            image: "/certificate/cert1.png",
-        },
-        {
-            id: 2,
-            title: "Backend Development",
-            description: "Learn Node.js, Express, and database management.",
-            image: "/certificate/cert2.png",
-        },
-        {
-            id: 3,
-            title: "Data Science",
-            description: "Explore Python, pandas, and machine learning basics.",
-            image: "/certificate/cert3.png",
-        },
-    ];
-
-    const certificates = [
-        {
-            id: 1,
-            course: "Web Development Basics",
-            date: "Aug 14, 2025",
-            image: "/certificate/cert1.png",
-        },
-        {
-            id: 2,
-            course: "Advanced React",
-            date: "Sep 10, 2025",
-            image: "/certificate/cert2.png",
-        },
-        {
-            id: 3,
-            course: "Python for Data Science",
-            date: "Oct 02, 2025",
-            image: "/certificate/cert3.png",
-        },
-    ];
-
-    const handleDownload = (cert) => {
-        const link = document.createElement("a");
-        link.href = cert.image;
-        link.download = `${cert.course}-certificate.png`;
-        link.click();
-    };
+    // Remove the unused student 'certificates' array and 'handleDownload' function
 
     const handleIssueCertificate = (programId) => {
-        router.push(`/admin/issue-certificate?id=${programId}`);
+        // Navigate to the dynamic admin page
+        router.push(`certificates/${programId}`);
     };
 
     return (
-        <div className="space-y-10">
+        <div className="space-y-10 p-6 md:p-8 bg-gray-50 min-h-screen">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-[var(--text)] flex items-center gap-2">
-                    <Award className="text-[var(--accent)]" /> Certificates & Programs
+            <div className="border-b pb-4">
+                <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                    <GraduationCap className="text-blue-600 w-7 h-7" /> Certificate Issuance Dashboard
                 </h1>
-                <p className="text-sm text-gray-500">
-                    View your certificates or issue new ones for your programs 🎓
+                <p className="text-sm text-gray-500 mt-1">
+                    Select a program to review student eligibility and issue final certificates.
                 </p>
             </div>
 
-            {/* Certificates Section
-            <section>
-                <h2 className="text-xl font-semibold mb-4">Earned Certificates</h2>
-                {certificates.length > 0 ? (
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {certificates.map((cert) => (
-                            <div
-                                key={cert.id}
-                                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-4 flex flex-col items-center text-center"
-                            >
-                                <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img
-                                        src={cert.image}
-                                        alt={cert.course}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="mt-4">
-                                    <h3 className="text-lg font-semibold text-[var(--text)]">
-                                        {cert.course}
-                                    </h3>
-                                    <p className="text-sm text-gray-500">{cert.date}</p>
-                                </div>
-
-                                <button
-                                    onClick={() => handleDownload(cert)}
-                                    className="mt-4 bg-[var(--primary)] text-white py-2 px-4 rounded-lg hover:bg-[var(--accent)] transition-all flex items-center gap-2"
-                                >
-                                    <Download size={18} /> Download
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="text-center py-16 bg-white rounded-2xl shadow-md">
-                        <Award className="mx-auto text-[var(--accent)] mb-4" size={40} />
-                        <p className="text-gray-500">
-                            You haven’t earned any certificates yet.
-                        </p>
-                    </div>
-                )}
-            </section> */}
-
             {/* Programs Section */}
             <section>
-                <h2 className="text-xl font-semibold mb-4">Available Programs</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {programs.map((program) => (
+                <h2 className="text-2xl font-semibold mb-6 text-gray-800">Programs Ready for Review</h2>
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    {PROGRAMS_FOR_CERTIFICATION.map((program) => (
                         <div
                             key={program.id}
-                            className="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-4 flex flex-col text-center"
+                            className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 flex flex-col border-t-4 border-blue-600"
                         >
-                            <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
-                                <img
-                                    src={program.image}
-                                    alt={program.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-
-                            <div className="mt-4 flex-1">
-                                <h3 className="text-lg font-semibold text-[var(--text)]">
+                            <div className="flex-1">
+                                <h3 className="text-xl font-bold text-gray-800 mb-2">
                                     {program.title}
                                 </h3>
-                                <p className="text-sm text-gray-500">{program.description}</p>
+                                <p className="text-sm text-gray-600 mb-4 h-12 line-clamp-2">
+                                    {program.description}
+                                </p>
+                            </div>
+
+                            <div className="flex justify-between items-center text-sm mb-4 pt-4 border-t border-gray-100">
+                                <div className="flex items-center text-gray-700">
+                                    <Users size={18} className="mr-2 text-green-600" />
+                                    <span>Enrolled: <span className="font-semibold">{program.totalEnrolled}</span></span>
+                                </div>
+                                <div className="flex items-center text-gray-700">
+                                    <Award size={18} className="mr-2 text-yellow-600" />
+                                    <span>Eligible: <span className="font-semibold">{program.studentsEligible}</span></span>
+                                </div>
                             </div>
 
                             <button
                                 onClick={() => handleIssueCertificate(program.id)}
-                                className="mt-4 bg-[var(--primary)] text-white py-2 px-4 rounded-lg hover:bg-[var(--accent)] transition-all flex items-center justify-center gap-2"
+                                className="mt-2 bg-blue-600 text-white py-3 px-4 rounded-xl hover:bg-blue-700 transition-all font-medium flex items-center justify-center gap-2 shadow-lg"
                             >
-                                <FileCheck size={18} /> Issue Certificate
+                                <FileCheck size={18} /> Review & Issue Certificates
                             </button>
                         </div>
                     ))}
