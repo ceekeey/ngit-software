@@ -7,19 +7,19 @@ export default function CertificatesPage() {
             id: 1,
             course: "Web Development Basics",
             date: "Aug 14, 2025",
-            image: "/cert1.png",
+            image: "/certificate/cert1.png",
         },
         {
             id: 2,
             course: "Advanced React",
             date: "Sep 10, 2025",
-            image: "/cert2.png",
+            image: "/certificate/cert2.png",
         },
         {
             id: 3,
             course: "Python for Data Science",
             date: "Oct 02, 2025",
-            image: "/cert3.png",
+            image: "/certificate/cert3.png",
         },
     ];
 

@@ -73,13 +73,13 @@ export default function CoursePaymentsPage() {
                     </p>
                 </div>
 
-                <button
+                {/* <button
                     onClick={() => setShowModal(true)}
                     className="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all flex items-center gap-2 font-medium shadow-md"
                 >
                     <FaCreditCard />
                     Record New Payment
-                </button>
+                </button> */}
             </div>
 
             {/* --- RECHARTS CHART --- */}

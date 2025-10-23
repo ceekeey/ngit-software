@@ -59,7 +59,7 @@ export default function SingleProgramPaymentsPage() {
         <div className="space-y-8 p-6 md:p-8">
             {/* Header and Back Button */}
             <div className="border-b pb-4">
-                <Link href="/payments" className="flex items-center text-blue-600 hover:text-blue-800 transition mb-3 font-medium">
+                <Link href="../payments" className="flex items-center text-blue-600 hover:text-blue-800 transition mb-3 font-medium">
                     <FaArrowLeft className="mr-2" /> Back to Programs Overview
                 </Link>
                 <h1 className="text-3xl font-extrabold text-gray-800">{programDetails.name}</h1>
