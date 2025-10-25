@@ -7,7 +7,7 @@ const Hero = () => {
   const slides = [
     "/slide/vid.mp4",
     "/slide/1.jpeg",
-    "/slide/2.png",
+    "/slide/2.jpeg",
     "/slide/3.png",
   ];
 
@@ -102,7 +102,7 @@ const Hero = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <a
-            href="student-register"
+            href="signup"
             className="bg-[#0052CC] text-white px-6 py-3 rounded-full hover:bg-[#2E8BFD] transition shadow-md"
           >
             Register for a course

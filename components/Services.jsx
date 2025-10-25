@@ -98,20 +98,7 @@ const services = [
         description:
             "Text understanding, chatbots, virtual assistants and document processing using modern language models and pipelines.",
     },
-    {
-        id: "mlops",
-        Icon: Cloud,
-        title: "MLOps & Model Deployment",
-        description:
-            "Productionizing ML: model versioning, CI/CD for models, monitoring and scalable serving on cloud or edge infrastructure.",
-    },
-    {
-        id: "iot-edge",
-        Icon: Globe,
-        title: "IoT & Edge Computing",
-        description:
-            "Sensor integration, edge processing and telemetry pipelines for real-time monitoring, automation and remote management.",
-    },
+    // removed "MLOps & Model Deployment" and "IoT & Edge Computing"
 ];
 
 const containerVariants = {
@@ -192,7 +179,7 @@ const Services = () => {
                         {/* subtle CTA for larger screens */}
                         <div className="mt-4 flex justify-center">
                             <a
-                                href="#contact"
+                                href="contact"
                                 className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-[#2E8BFD] ring-1 ring-[#DCEEFF] rounded-md hover:bg-[#F0F8FF] focus:ring-2 focus:ring-offset-1 focus:ring-[#BEE0FF]"
                                 aria-label={`Contact us about ${title}`}
                             >
