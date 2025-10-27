@@ -1,5 +1,3 @@
-// components/Footer.js
-
 "use client";
 import { useState } from "react"; // Removed redundant React import
 import { motion } from "framer-motion";
@@ -8,19 +6,28 @@ import Image from "next/image"; // 💡 Import Image
 import {
   FaFacebookF,
   FaInstagram,
-  FaLinkedinIn,
   FaTwitter,
+  FaWhatsapp,
 } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState(null);
 
   const handleSubscribe = (e) => {
-    // ... (logic remains the same)
+    // validate email
+
+    if (!email) return toast.error("Please enter a valid email address.");
   };
 
-  const navLinks = ["Home", "About", "Services", "Training", "Contact"];
+  const navLinks = [
+    { id: 1, link: "Home", path: "/" },
+    { id: 2, link: "Apply For Training", path: "/student-register" },
+    { id: 3, link: "Student", path: "/student-login" },
+    { id: 4, link: "Staff", path: "/staff-login" },
+    { id: 5, link: "Admin", path: "/admin-login" },
+  ];
 
   return (
     <footer className="bg-gray-900 text-gray-300 py-14 px-6">
@@ -50,7 +57,6 @@ const Footer = () => {
           </div>
         </motion.div>
 
-        {/* Quick Links */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -58,18 +64,16 @@ const Footer = () => {
         >
           <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
           <ul className="space-y-2 text-sm">
-            {navLinks.map((item, i) => (
-              <li key={i}>
-                {/* 💡 Use Next.js Link for navigation */}
-                <Link href={item === "Home" ? "/" : `/${item.toLowerCase()}`} className="hover:text-blue-400 transition">
-                  {item}
+            {navLinks.map(({ id, link, path }) => (
+              <li key={id}>
+                <Link href={path} className="hover:text-blue-400 transition">
+                  {link}
                 </Link>
               </li>
             ))}
           </ul>
         </motion.div>
 
-        {/* Contact Info (Remains the same as it has no links) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -88,13 +92,13 @@ const Footer = () => {
               <svg className="w-4 h-4 text-green-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C9.16 21 3 14.84 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.24 1.05l-2.2 2.2z" />
               </svg>
-              <span>+234 812 345 6789</span>
+              <span>+2348022777887</span>
             </li>
             <li className="flex items-center gap-3">
               <svg className="w-4 h-4 text-pink-400 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
               </svg>
-              <span>info@ngitsoftwaresolutions.com</span>
+              <span>support@ngit.com.ng</span>
             </li>
           </ul>
         </motion.div>
@@ -110,7 +114,7 @@ const Footer = () => {
           <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
-              placeholder="you@domain.com"
+              placeholder="user@ngit.com.ng"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="flex-1 px-3 py-2 rounded-md bg-gray-800 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -128,10 +132,10 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
             <div className="flex gap-4">
               {[
-                { icon: <FaFacebookF />, color: "hover:bg-blue-600", href: "#" },
-                { icon: <FaInstagram />, color: "hover:bg-pink-600", href: "#" },
-                { icon: <FaTwitter />, color: "hover:bg-sky-500", href: "#" },
-                { icon: <FaLinkedinIn />, color: "hover:bg-blue-700", href: "#" },
+                { icon: <FaFacebookF />, color: "hover:bg-blue-600", href: "https://facebook.com/ngitsoftware" },
+                { icon: <FaInstagram />, color: "hover:bg-pink-600", href: "https://www.instagram.com/ngitsoftware/" },
+                { icon: <FaTwitter />, color: "hover:bg-sky-500", href: "http://x.com/@ngitsoftware" },
+                { icon: <FaWhatsapp />, color: "hover:bg-green-700", href: "http://wa.me/+2349086031614" },
               ].map((social, i) => (
                 <a
                   key={i}
@@ -151,7 +155,7 @@ const Footer = () => {
 
       {/* Divider */}
       <div className="border-t border-gray-700 mt-12 pt-6 text-center text-xs text-gray-500">
-        © {new Date().getFullYear()} NGIT Software Solutions. All Rights Reserved.
+        © 2013 - {new Date().getFullYear()} NGIT Software Solutions. All Rights Reserved.
       </div>
     </footer>
   );

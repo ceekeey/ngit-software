@@ -6,7 +6,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer"; // 💡 Added Footer for page completion
 import Link from "next/link"; // 💡 Import Link for internal links
 
-const GOOGLE_MAPS_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15764.332303270926!2d11.160161474935293!3d10.289297072528773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10842e12e1a3b53f%3A0xc3f837e244795992!2sLayol%20Plaza%2C%20Along%20FCE(T)%20Road%2C%20Tashan%20Dukku%2C%20Gombe!5e0!3m2!1sen!2sng!4v1700000000000!5m2!1sen!2sng";
+const GOOGLE_MAPS_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3925.497606637835!2d11.156251009329207!3d10.302003089776933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10ffd18b90438b6b%3A0x2d37e90efc153243!2sNGIT%20Software%20Solutions!5e0!3m2!1sen!2sng!4v1761579071599!5m2!1sen!2sng";
 
 const Contact = () => {
     const handleFormSubmit = (e) => {
@@ -17,8 +17,6 @@ const Contact = () => {
     return (
         <main>
             <Navigation />
-
-            {/* ===== GOOGLE MAPS IFRAME (Replaces Leaflet) ===== */}
             <div className="relative h-[400px] w-full shadow-lg rounded-b-3xl overflow-hidden">
                 <iframe
                     src={GOOGLE_MAPS_EMBED_URL}

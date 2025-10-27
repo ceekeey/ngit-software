@@ -168,9 +168,8 @@ const Training = () => {
         transition={{ delay: 0.4 }}
         className="mt-12"
       >
-        {/* 💡 CRITICAL FIX: Use Next.js Link for internal navigation */}
         <Link
-          href="/contact"
+          href="http://wa.me/+2349086031614"
           className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
         >
           Contact Us for Custom Training
