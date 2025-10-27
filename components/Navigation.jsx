@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const Navigation = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +23,17 @@ const Navigation = () => {
             <div className="max-w-7xl mx-auto flex items-center justify-between">
                 {/* Left: Logo and Brand */}
                 <div className="flex items-center gap-3">
-                    <img src="/logo.png" alt="NGIT Logo" className="h-9 w-auto" />
+                    {/* 💡 Critical UX/LCP Improvement: Use Next.js Image Component */}
+                    <Image
+                        src="/logo.png"
+                        alt="NGIT Software Solution Logo"
+                        // You must define explicit width and height
+                        width={36} // h-9 is 36px
+                        height={36}
+                        // The logo is critical, so we use priority
+                        priority
+                        className="w-auto"
+                    />
                     <span className="font-semibold text-lg md:text-xl tracking-wide">
                         NGIT Software Solution
                     </span>

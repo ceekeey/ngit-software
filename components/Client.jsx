@@ -1,6 +1,8 @@
 "use client";
-import React from "react";
+// 1. Remove redundant React import
 import { motion } from "framer-motion";
+// 💡 Import Next.js Image component
+import Image from "next/image"
 
 const clients = [
   { name: "Africa", logo: "/clients/2.png" },
@@ -14,7 +16,7 @@ const clients = [
 const Client = () => {
   return (
     <section className="relative py-20 text-center overflow-hidden">
-      {/* Animated gradient background */}
+      {/* Animated gradient background (Assumes .animate-gradient-slow is in globals.css) */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-100 via-purple-100 to-cyan-100 dark:from-blue-950 dark:via-purple-900 dark:to-cyan-900 animate-gradient-slow"></div>
 
       <div className="relative z-10">
@@ -43,7 +45,7 @@ const Client = () => {
         {/* Infinite scrolling logos */}
         <div className="relative w-full overflow-hidden">
           <motion.div
-            className="flex gap-12 items-center justify-center"
+            className="flex gap-12 items-center"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Infinity,
@@ -56,10 +58,14 @@ const Client = () => {
                 key={index}
                 className="flex items-center justify-center bg-white dark:bg-gray-800 rounded-xl shadow-md border border-blue-100 dark:border-gray-700 p-4 min-w-[120px] sm:min-w-[140px] md:min-w-[160px] hover:shadow-lg hover:-translate-y-1 transition-transform"
               >
-                <img
+                {/* 💡 CRITICAL CHANGE: Use next/image for optimization */}
+                <Image
                   src={client.logo}
-                  alt={client.name}
-                  className="w-20 h-20 object-contain transition-transform duration-300 hover:scale-105"
+                  alt={`Client logo: ${client.name}`} // Descriptive alt text
+                  width={80} // Explicit width (matching w-20)
+                  height={80} // Explicit height (matching h-20)
+                  loading="lazy" // Auto-lazy loading
+                  className="object-contain transition-transform duration-300 hover:scale-105"
                 />
               </div>
             ))}
@@ -67,24 +73,6 @@ const Client = () => {
         </div>
       </div>
 
-      {/* Gradient animation CSS */}
-      <style jsx global>{`
-        @keyframes gradientMove {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
-        }
-        .animate-gradient-slow {
-          background-size: 200% 200%;
-          animation: gradientMove 10s ease infinite;
-        }
-      `}</style>
     </section>
   );
 };

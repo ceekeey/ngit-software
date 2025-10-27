@@ -1,15 +1,10 @@
 "use client";
-import React, { memo } from "react";
+// 1. Remove the redundant 'React' import
+import { memo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Code, Palette, Database, Globe, Cloud } from "lucide-react";
-
-/**
- * Modernized Services component
- * - Uses a data-driven map instead of repeating markup
- * - Accessible (roles, aria-labelledby, keyboard focusable)
- * - Uses framer-motion variants with reduced-motion support
- * - Cleaner, responsive Tailwind styles and subtle interactions
- */
+// 💡 Import Next.js Link
+import Link from "next/link";
 
 const services = [
     {
@@ -61,13 +56,6 @@ const services = [
         description:
             "Support for undergraduate & postgraduate projects — from proposal and write-up to implementation.",
     },
-    {
-        id: "devops-cloud",
-        Icon: Cloud,
-        title: "DevOps & Cloud Infrastructure",
-        description:
-            "CI/CD pipelines, containerization (Docker/Kubernetes), cloud deployments (AWS, Azure, GCP), monitoring, scalability and cost optimization.",
-    },
 
     // New AI/ML and data services
     {
@@ -98,7 +86,6 @@ const services = [
         description:
             "Text understanding, chatbots, virtual assistants and document processing using modern language models and pipelines.",
     },
-    // removed "MLOps & Model Deployment" and "IoT & Edge Computing"
 ];
 
 const containerVariants = {
@@ -176,15 +163,15 @@ const Services = () => {
                             {description}
                         </p>
 
-                        {/* subtle CTA for larger screens */}
+                        {/* 💡 CRITICAL FIX: Use Next.js Link for internal navigation */}
                         <div className="mt-4 flex justify-center">
-                            <a
-                                href="contact"
+                            <Link // Changed from <a> to <Link>
+                                href="/contact" // Use /contact
                                 className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-[#2E8BFD] ring-1 ring-[#DCEEFF] rounded-md hover:bg-[#F0F8FF] focus:ring-2 focus:ring-offset-1 focus:ring-[#BEE0FF]"
                                 aria-label={`Contact us about ${title}`}
                             >
                                 Learn more
-                            </a>
+                            </Link>
                         </div>
                     </motion.article>
                 ))}

@@ -1,55 +1,39 @@
 "use client";
 
-import React, { useEffect } from "react";
-import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { MapPin, Mail, Phone } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer"; // 💡 Added Footer for page completion
+import Link from "next/link"; // 💡 Import Link for internal links
 
-// ✅ Dynamic import don kada Next.js ya yi SSR a leaflet
-const LeafletMap = dynamic(() => import("leaflet"), { ssr: false });
+const GOOGLE_MAPS_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15764.332303270926!2d11.160161474935293!3d10.289297072528773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x10842e12e1a3b53f%3A0xc3f837e244795992!2sLayol%20Plaza%2C%20Along%20FCE(T)%20Road%2C%20Tashan%20Dukku%2C%20Gombe!5e0!3m2!1sen!2sng!4v1700000000000!5m2!1sen!2sng";
 
 const Contact = () => {
-    useEffect(() => {
-        (async () => {
-            const L = await import("leaflet"); // Load leaflet a client side
-            await import("leaflet/dist/leaflet.css"); // Import CSS bayan component ya mount
-
-            // === Initialize OpenStreetMap using Leaflet ===
-            const map = L.map("realMap").setView([10.2897, 11.1731], 13); // Gombe coordinates
-
-            // Add OpenStreetMap layer
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
-                attribution: "© OpenStreetMap contributors",
-            }).addTo(map);
-
-            // Custom blue marker icon
-            const icon = L.icon({
-                iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-                iconSize: [40, 40],
-                iconAnchor: [20, 40],
-                popupAnchor: [0, -40],
-            });
-
-            // Add marker for Gombe
-            L.marker([10.2897, 11.1731], { icon })
-                .addTo(map)
-                .bindPopup("<b>Gombe, Nigeria</b><br>Beautiful city of peace.")
-                .openPopup();
-        })();
-    }, []);
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        console.log("Contact form submitted!");
+    };
 
     return (
-        <div>
+        <main>
             <Navigation />
 
-            {/* ===== Real Interactive Free Map (OpenStreetMap) ===== */}
+            {/* ===== GOOGLE MAPS IFRAME (Replaces Leaflet) ===== */}
             <div className="relative h-[400px] w-full shadow-lg rounded-b-3xl overflow-hidden">
-                <div id="realMap" className="w-full h-full z-0"></div>
+                <iframe
+                    src={GOOGLE_MAPS_EMBED_URL}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    title="Location of NGIT Software Solutions in Gombe"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0 z-0"
+                />
             </div>
 
-            {/* ===== Contact Info Cards ===== */}
+            {/* ===== Contact Info Cards (No change needed) ===== */}
             <section className="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-8">
                 {[
                     {
@@ -91,7 +75,7 @@ const Contact = () => {
                 ))}
             </section>
 
-            {/* ===== Contact Form ===== */}
+            {/* ===== Contact Form (Optimized) ===== */}
             <motion.section
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -102,31 +86,40 @@ const Contact = () => {
                     <h2 className="text-3xl font-bold text-center text-[#0052cc] mb-10">
                         Send Us a Message
                     </h2>
-                    <form className="grid md:grid-cols-2 gap-6">
+                    <form className="grid md:grid-cols-2 gap-6" onSubmit={handleFormSubmit}>
                         <input
                             type="text"
                             placeholder="Your Name"
+                            // 💡 A11y and UX improvements: add name/id
+                            name="name"
+                            required
                             className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0052cc] outline-none"
                         />
                         <input
                             type="email"
                             placeholder="Your Email"
+                            name="email"
+                            required
                             className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0052cc] outline-none"
                         />
                         <input
                             type="text"
                             placeholder="Subject"
+                            name="subject"
+                            required
                             className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0052cc] outline-none md:col-span-2"
                         />
                         <textarea
                             rows="4"
                             placeholder="Message"
+                            name="message"
+                            required
                             className="border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#0052cc] outline-none md:col-span-2"
                         ></textarea>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            type="button"
+                            type="submit" // 💡 Changed to submit
                             className="bg-[#0052cc] hover:bg-[#003d99] text-white py-3 px-6 rounded-xl font-semibold md:col-span-2 transition"
                         >
                             Send Message
@@ -134,7 +127,9 @@ const Contact = () => {
                     </form>
                 </div>
             </motion.section>
-        </div>
+
+            <Footer />
+        </main>
     );
 };
 

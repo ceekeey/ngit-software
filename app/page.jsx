@@ -1,16 +1,24 @@
-import Client from "@/components/Client";
-import Footer from "@/components/Footer";
+// app/page.js
+
+// 1. We remove the 'React' import as it's not needed for Server Components.
 import Hero from "@/components/Hero";
 import Navigation from "@/components/Navigation";
-import Services from "@/components/Services";
 import Team from "@/components/Team";
+import Services from "@/components/Services";
 import Training from "@/components/Training";
-import React from "react";
+import Client from "@/components/Client";
+import Footer from "@/components/Footer";
+
 import { Toaster } from "react-hot-toast";
 
-const hompage = () => {
+export const metadata = {
+  title: "Ngit Software Solutions",
+  description: "Accelerate your business with modern, high-performance web and mobile applications. Ngit specializes in Next.js, full-stack development, and enterprise training.",
+};
+
+export default function HomePage() {
   return (
-    <main className="bg-background text-text min-h-screen">
+    <main>
       <Navigation />
       <Hero />
       <Team />
@@ -22,5 +30,3 @@ const hompage = () => {
     </main>
   );
 };
-
-export default hompage;

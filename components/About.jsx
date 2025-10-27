@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link"; // Import Link for internal fragment link
 
 const About = () => {
   const container = {
@@ -21,69 +21,69 @@ const About = () => {
     >
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         {/* Left: Video / Illustration */}
-          <motion.div
-            className="flex-1 w-full relative"
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="relative rounded-2xl overflow-hidden shadow-xl">
-              <video
-                className="w-full h-64 md:h-96 object-cover"
-                poster="/slide/vid.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                aria-label="NGIT Software Solutions team and workspace video"
-              >
-                <source src="/slide/vid.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-
-              <div className="absolute top-4 left-4 bg-white/95 dark:bg-black/70 text-sm font-semibold text-[#0f1724] dark:text-white px-3 py-1 rounded-full border">
-                Since 2013
-              </div>
+        <motion.div
+          className="flex-1 w-full relative"
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="relative rounded-2xl overflow-hidden shadow-xl">
+            <video
+              className="w-full h-64 md:h-96 object-cover"
+              // 💡 FIX: Use a static image for the poster for faster loading
+              poster="/slide/vid-poster.webp" // <-- Replace this with an actual optimized image path
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label="NGIT Software Solutions team and workspace video"
+            >
+              <source src="/slide/vid.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="absolute top-4 left-4 bg-white/95 dark:bg-black/70 text-sm font-semibold text-[#0f1724] dark:text-white px-3 py-1 rounded-full border">
+              Since 2013
             </div>
+          </div>
 
-            <div className="mt-4 grid grid-cols-3 gap-3">
-              <motion.div
-                className="bg-white/90 rounded-lg p-3 text-center shadow"
-                variants={item}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-[#0052CC]">50+</div>
-                <div className="text-xs text-[#475569]">Projects</div>
-              </motion.div>
-
-              <motion.div
-                className="bg-white/90 rounded-lg p-3 text-center shadow"
-                variants={item}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-[#2E8BFD]">30+</div>
-                <div className="text-xs text-[#475569]">Clients</div>
-              </motion.div>
-
-              <motion.div
-                className="bg-white/90 rounded-lg p-3 text-center shadow"
-                variants={item}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-              >
-                <div className="text-2xl font-bold text-[#06b6d4]">100%</div>
-                <div className="text-xs text-[#475569]">Satisfaction</div>
-              </motion.div>
-            </div>
+          <div className="mt-4 grid grid-cols-3 gap-3">
+            <motion.div
+              className="bg-white/90 rounded-lg p-3 text-center shadow"
+              variants={item}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="text-2xl font-bold text-[#0052CC]">50+</div>
+              <div className="text-xs text-[#475569]">Projects</div>
             </motion.div>
 
-          {/* Right: Text */}
+            <motion.div
+              className="bg-white/90 rounded-lg p-3 text-center shadow"
+              variants={item}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="text-2xl font-bold text-[#2E8BFD]">30+</div>
+              <div className="text-xs text-[#475569]">Clients</div>
+            </motion.div>
+
+            <motion.div
+              className="bg-white/90 rounded-lg p-3 text-center shadow"
+              variants={item}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <div className="text-2xl font-bold text-[#06b6d4]">100%</div>
+              <div className="text-xs text-[#475569]">Satisfaction</div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Right: Text */}
         <motion.div
           className="flex-1 text-center md:text-left"
           variants={container}

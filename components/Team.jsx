@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const teamMembers = [
   {
@@ -68,11 +68,18 @@ const Team = () => {
             transition={{ duration: 0.8, delay: index * 0.15 }}
             className="bg-[#F5F7FA] rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition"
           >
-            <img
-              src={member.image}
-              alt={member.name}
-              className="w-full h-60 object-cover object-cover rounded-t-2xl"
-            />
+            {/* 💡 CRITICAL CHANGE: Use next/image for optimization */}
+            <div className="relative w-full h-60"> {/* Wrapper for object-cover behavior */}
+              <Image
+                src={member.image}
+                alt={`Portrait of ${member.name}, ${member.role} at NGIT`} // Improved alt text
+                fill // Use fill to cover the parent div's height/width
+                sizes="(max-width: 768px) 100vw, 25vw" // Recommended for responsive sizing
+                loading="lazy" // Ensures it only loads when in viewport (UX)
+                className="object-cover object-center rounded-t-2xl"
+              />
+            </div>
+
             <div className="p-5">
               <h3 className="text-lg font-semibold text-[#1C1C1E]">
                 {member.name}

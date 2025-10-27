@@ -1,64 +1,111 @@
 'use client'
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Link from 'next/link'; // 💡 Import Link
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
 const StudentSingupForm = () => {
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
-    // Step 1 fields
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phone, setPhone] = useState('')
-    // Step 2 fields
-    const [username, setUsername] = useState('') // Changed to username
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('') // New state for confirm password
-    // Step 3 fields (New)
-    const [gender, setGender] = useState('')
-    const [dob, setDob] = useState('')
-    const [address, setAddress] = useState('')
+    // 💡 Combine state and add error state
+    const [formData, setFormData] = useState({
+        name: '', email: '', phone: '',
+        username: '', password: '', confirmPassword: '',
+        gender: '', dob: '', address: ''
+    });
+    const [errors, setErrors] = useState({});
 
-    // hanldle form submission
+    // 💡 Universal change handler
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        // Clear error when user starts typing
+        setErrors(prev => ({ ...prev, [name]: undefined }));
+    };
+
+    // 💡 Rigorous step-specific validation function
+    const validateStep = (currentStep) => {
+        let tempErrors = {};
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        // Step 1 Validation
+        if (currentStep === 1) {
+            if (!formData.name) tempErrors.name = "Full Name is required.";
+            if (!formData.email || !emailRegex.test(formData.email)) tempErrors.email = "Valid email is required.";
+            if (!formData.phone || formData.phone.length < 10) tempErrors.phone = "Valid phone number required.";
+        }
+
+        // Step 2 Validation
+        if (currentStep === 2) {
+            if (!formData.username || formData.username.length < 4) tempErrors.username = "Username must be at least 4 characters.";
+            if (!formData.password || formData.password.length < 8) tempErrors.password = "Password must be at least 8 characters."; // 💡 Security check
+            if (formData.password !== formData.confirmPassword) {
+                tempErrors.confirmPassword = "Passwords do not match.";
+            } else if (!formData.confirmPassword) {
+                tempErrors.confirmPassword = "Please confirm your password.";
+            }
+        }
+
+        // Step 3 Validation
+        if (currentStep === 3) {
+            if (!formData.gender) tempErrors.gender = "Gender selection is required.";
+            if (!formData.dob) tempErrors.dob = "Date of Birth is required.";
+            if (!formData.address || formData.address.length < 10) tempErrors.address = "A valid address is required.";
+        }
+
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0;
+    };
+
+
     const handleRegister = async (e) => {
         e.preventDefault();
-        if (!name || !email || !phone || !username || !gender || !dob || !address) {
-            toast.error("Please fill in all required fields.");
-            return;
-        }
-        if (password !== confirmPassword) {
-            toast.error("Passwords do not match.");
-            return;
-        }
 
+        // Final validation before API call
+        if (!validateStep(3)) {
+            toast.error("Please correct the errors in the form.");
+            return;
+        }
 
         try {
-            // setLoading(true);
-            const res = await fetch('http://localhost/ngit-api/auth/singup.php', {
+            setLoading(true);
+            const res = await fetch('http://your-secure-api.com/auth/signup', { // 💡 Change to secure URL
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, email, phone, username, password, gender, dob, address }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
             });
+
             const data = await res.json();
-            console.log(name, email, phone, username, password, gender, dob, address)
 
             if (!res.ok) {
                 throw new Error(data.message || 'Registration failed');
             }
+
+            toast.success("Registration successful! Redirecting to login.");
+            // 💡 Handle successful registration (e.g., redirect to login page)
         } catch (error) {
-            toast.error("An error occurred during registration." || error.message);
+            toast.error(error.message || "An error occurred during registration.");
+        } finally {
+            setLoading(false);
         }
     }
 
-    const nextStep = () => setStep((prev) => Math.min(prev + 1, 3));
+    const nextStep = () => {
+        if (validateStep(step)) { // 💡 Validate current step before proceeding
+            setStep((prev) => Math.min(prev + 1, 3));
+            setErrors({}); // Clear global errors
+        } else {
+            toast.error("Please fill out the current step correctly.");
+        }
+    };
+
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
     return (
         <div className="flex w-full md:w-1/2 justify-center items-center p-8">
             <div className="w-full max-w-md space-y-6">
+                {/* ... (H1 and Progress bar remain the same) ... */}
                 <h1 className="text-3xl font-bold text-[var(--text)]">
                     Create Your Account ✨
                 </h1>
@@ -74,111 +121,124 @@ const StudentSingupForm = () => {
                     />
                 </div>
 
+
                 <form className="space-y-4" onSubmit={handleRegister}>
                     {step === 1 && (
                         <>
+                            {/* Full Name */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Full Name
-                                </label>
+                                <label htmlFor="full-name" className="block text-sm font-medium text-[var(--text)]/80">Full Name</label>
                                 <input
+                                    id="full-name" // 💡 A11y Fix
+                                    name="name"
                                     type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.name ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="John Doe"
                                     required
                                 />
+                                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                             </div>
 
+                            {/* Email */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Email
-                                </label>
+                                <label htmlFor="email" className="block text-sm font-medium text-[var(--text)]/80">Email</label>
                                 <input
+                                    id="email" // 💡 A11y Fix
+                                    name="email"
                                     type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.email ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="you@example.com"
                                     required
                                 />
+                                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                             </div>
 
+                            {/* Phone Number */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Phone Number
-                                </label>
+                                <label htmlFor="phone" className="block text-sm font-medium text-[var(--text)]/80">Phone Number</label>
                                 <input
+                                    id="phone" // 💡 A11y Fix
+                                    name="phone"
                                     type="tel"
-                                    value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.phone ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="+1 234 567 890"
                                     required
                                 />
+                                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                             </div>
                         </>
                     )}
 
                     {step === 2 && (
                         <>
+                            {/* Password */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Password
-                                </label>
+                                <label htmlFor="password" className="block text-sm font-medium text-[var(--text)]/80">Password</label>
                                 <input
+                                    id="password" // 💡 A11y Fix
+                                    name="password"
                                     type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.password ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
+                                    placeholder="•••••••• (Min 8 characters)"
+                                    required
+                                    minLength={8} // 💡 HTML validation for security
+                                />
+                                {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div>
+                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-[var(--text)]/80">Confirm Password</label>
+                                <input
+                                    id="confirmPassword" // 💡 A11y Fix
+                                    name="confirmPassword"
+                                    type="password"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="••••••••"
                                     required
                                 />
+                                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
                             </div>
 
+                            {/* Username */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Confirm Password
-                                </label>
+                                <label htmlFor="username" className="block text-sm font-medium text-[var(--text)]/80">Username</label>
                                 <input
-                                    type="password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
-                                    placeholder="••••••••"
-                                    required
-                                />
-                            </div>
-
-                            {/* **CONFIRM PASSWORD will be USERNAME - as requested** */}
-                            <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Username
-                                </label>
-                                <input
+                                    id="username" // 💡 A11y Fix
+                                    name="username"
                                     type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.username}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.username ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="johndoe"
                                     required
                                 />
+                                {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
                             </div>
                         </>
                     )}
 
                     {step === 3 && (
                         <>
-                            {/* **LAST STEP fields changed to GENDER, DATE OF BIRTH, ADDRESS - as requested** */}
+                            {/* Gender */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Gender
-                                </label>
+                                <label htmlFor="gender" className="block text-sm font-medium text-[var(--text)]/80">Gender</label>
                                 <select
-                                    value={gender}
-                                    onChange={(e) => setGender(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    id="gender" // 💡 A11y Fix
+                                    name="gender"
+                                    value={formData.gender}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.gender ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     required
                                 >
                                     <option value="">Select Gender</option>
@@ -186,33 +246,38 @@ const StudentSingupForm = () => {
                                     <option value="Female">Female</option>
                                     <option value="Other">Other</option>
                                 </select>
+                                {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
                             </div>
 
+                            {/* Date of Birth */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Date of Birth
-                                </label>
+                                <label htmlFor="dob" className="block text-sm font-medium text-[var(--text)]/80">Date of Birth</label>
                                 <input
+                                    id="dob" // 💡 A11y Fix
+                                    name="dob"
                                     type="date"
-                                    value={dob}
-                                    onChange={(e) => setDob(e.target.value)}
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white"
+                                    value={formData.dob}
+                                    onChange={handleChange}
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white ${errors.dob ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     required
                                 />
+                                {errors.dob && <p className="text-red-500 text-xs mt-1">{errors.dob}</p>}
                             </div>
 
+                            {/* Address */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text)]/80">
-                                    Address
-                                </label>
+                                <label htmlFor="address" className="block text-sm font-medium text-[var(--text)]/80">Address</label>
                                 <textarea
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
+                                    id="address" // 💡 A11y Fix
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
                                     rows="2"
-                                    className="w-full mt-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] bg-white resize-none"
+                                    className={`w-full mt-1 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 bg-white resize-none ${errors.address ? 'border-red-500' : 'border-gray-300 focus:ring-[var(--accent)]'}`}
                                     placeholder="Street Address, City, State/Province"
                                     required
                                 />
+                                {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
                             </div>
                         </>
                     )}
@@ -230,7 +295,7 @@ const StudentSingupForm = () => {
                         {step < 3 ? (
                             <button
                                 type="button"
-                                onClick={nextStep}
+                                onClick={nextStep} // 💡 Calls validation before nextStep
                                 className="ml-auto px-4 py-2 text-white font-medium bg-[var(--primary)] hover:bg-[var(--accent)] rounded-lg transition-all"
                             >
                                 Next
@@ -239,19 +304,13 @@ const StudentSingupForm = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="ml-auto px-4 py-2 text-white font-medium bg-[var(--primary)] hover:bg-[var(--accent)] rounded-lg transition-all"
+                                className="ml-auto px-4 py-2 text-white font-medium bg-[var(--primary)] hover:bg-[var(--accent)] rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {loading ? "Signing up..." : "Create Account"}
                             </button>
                         )}
                     </div>
                 </form>
-
-                <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-gray-300"></div>
-                    <span className="text-sm text-gray-500">or</span>
-                    <div className="flex-1 h-px bg-gray-300"></div>
-                </div>
 
                 {/* Social login buttons */}
                 <div className="flex gap-4">
@@ -270,17 +329,18 @@ const StudentSingupForm = () => {
                         GitHub
                     </button>
                 </div>
-
                 <p className="text-sm text-center text-gray-600">
                     Already have an account?{" "}
-                    <a href="/student-login" className="text-[var(--accent)] hover:underline">
+                    {/* 💡 Use Next.js Link */}
+                    <Link href="/student-login" className="text-[var(--accent)] hover:underline">
                         Log in
-                    </a>
+                    </Link>
                 </p>
                 <p className="text-sm text-center text-gray-600">
-                    <a href="/" className="text-[var(--accent)] hover:underline">
+                    {/* 💡 Use Next.js Link */}
+                    <Link href="/" className="text-[var(--accent)] hover:underline">
                         Back To Home
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

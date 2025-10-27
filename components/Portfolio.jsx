@@ -1,6 +1,10 @@
 "use client";
-import React, { useState } from "react";
+// 1. Remove redundant React import
+import { useState } from "react";
 import { motion } from "framer-motion";
+// 💡 Import Next.js Image component
+import Image from "next/image";
+import Link from "next/link"; // Link is not used yet, but good to have if any internal links are added
 
 const projects = [
   {
@@ -50,7 +54,8 @@ const Portfolio = () => {
   return (
     <section className="bg-gray-50 py-20" id="portfolio">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <motion.h2
+        {/* 💡 CRITICAL SEO FIX: Change H2 to H1 for the main page title */}
+        <motion.h1
           className="text-3xl font-bold text-gray-800 mb-8"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -58,19 +63,18 @@ const Portfolio = () => {
           viewport={{ once: true }}
         >
           Our Portfolio
-        </motion.h2>
+        </motion.h1>
 
-        {/* Filter Buttons */}
+        {/* Filter Buttons (Content remains the same) */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-5 py-2 rounded-full border transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50"
-              }`}
+              className={`px-5 py-2 rounded-full border transition-all duration-300 ${activeCategory === category
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-gray-700 border-gray-300 hover:bg-blue-50"
+                }`}
             >
               {category}
             </button>
@@ -92,11 +96,18 @@ const Portfolio = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-52 object-cover"
-              />
+              {/* 💡 CRITICAL CHANGE: Use next/image with explicit dimensions */}
+              <div className="relative w-full h-52">
+                <Image
+                  src={project.image}
+                  alt={`Project cover image for ${project.title}`}
+                  width={500} // Set a reasonable width based on your design (e.g., 500px)
+                  height={208} // Set a fixed height (h-52 is 208px in default Tailwind config)
+                  loading="lazy"
+                  className="object-cover"
+                />
+              </div>
+
               <div className="p-6 text-left">
                 <h3 className="text-xl font-semibold text-gray-800">
                   {project.title}

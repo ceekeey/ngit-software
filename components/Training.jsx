@@ -1,7 +1,10 @@
 "use client";
-import React from "react";
+// 1. Remove redundant React import
 import { motion } from "framer-motion";
 import Link from "next/link";
+// 💡 Import Next.js Image component
+import Image from "next/image";
+import { FaClock } from "react-icons/fa";
 
 const Training = () => {
   const trainings = [
@@ -124,11 +127,18 @@ const Training = () => {
             }}
             className="bg-white rounded-2xl shadow-md hover:shadow-2xl overflow-hidden transition flex flex-col transform hover:-translate-y-2 duration-300"
           >
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-44 object-cover"
-            />
+            {/* 💡 CRITICAL CHANGE: Use next/image for optimization and lazy loading */}
+            <div className="relative w-full h-44">
+              <Image
+                src={item.image}
+                alt={`Training course cover image for: ${item.title}`} // Improved alt text
+                fill // Use fill to cover the parent div's height/width
+                sizes="(max-width: 768px) 50vw, 25vw" // Helps Next.js optimize
+                loading="lazy" // Auto-lazy loading is great for components this far down
+                className="object-cover object-center"
+              />
+            </div>
+
             <div className="p-5 flex flex-col justify-between flex-grow">
               <div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
@@ -138,12 +148,14 @@ const Training = () => {
               </div>
               <div className="flex items-center justify-between text-sm text-gray-500 mt-4">
                 <span className="font-medium">
-                  <i className="fa-regular fa-clock mr-1"></i> {item.duration}
+                  <FaClock className="inline-block mr-1" /> {item.duration}
                 </span>
-                <Link href="/student-register" className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition">
+                <Link
+                  href="/student-register"
+                  className="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-blue-700 transition"
+                >
                   Enroll Now
                 </Link>
-
               </div>
             </div>
           </motion.div>
@@ -156,12 +168,13 @@ const Training = () => {
         transition={{ delay: 0.4 }}
         className="mt-12"
       >
-        <a
+        {/* 💡 CRITICAL FIX: Use Next.js Link for internal navigation */}
+        <Link
           href="/contact"
           className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
         >
           Contact Us for Custom Training
-        </a>
+        </Link>
       </motion.div>
     </section>
   );
