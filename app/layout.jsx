@@ -1,23 +1,14 @@
-// app/layout.js
-
 import "./globals.css";
-// 1. Import the Next.js Font module for automatic optimization
 import { Inter } from "next/font/google";
 
-// 2. Initialize your primary font
 const inter = Inter({ subsets: ["latin"] });
 
-// 3. ENHANCED METADATA CONFIGURATION
 export const metadata = {
-  // Use a template for branded titles across all pages
   title: {
     default: "Ngit Software Solutions: Modern Web & App Development",
     template: "%s | Ngit Software Solutions",
   },
-  // Make the description keyword-rich and specific
   description: "Ngit Software Solutions builds high-performance, modern websites and mobile applications using Next.js, React, and serverless technology. Contact us for custom software development.",
-
-  // Open Graph (OG) and Twitter for better social sharing (SEO)
   openGraph: {
     title: "Ngit Software Solutions: Modern Web & App Development",
     description: "Ngit Software Solutions builds high-performance, modern websites and mobile applications.",
